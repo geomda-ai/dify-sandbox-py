@@ -16,7 +16,8 @@ WORKDIR /app
 COPY requirements.txt .
 
 # Use uv to install base dependencies to system environment
-RUN uv pip install --system -r requirements.txt
+# Using --break-system-packages to override externally managed Python
+RUN uv pip install --system --break-system-packages -r requirements.txt
 
 # Copy application code and startup script
 COPY app/ ./app/
