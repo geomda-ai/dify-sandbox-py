@@ -1,11 +1,11 @@
-FROM python:3.12-slim-bookworm
+FROM ghcr.io/osgeo/gdal:ubuntu-small-3.10.3
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # Install Node.js
 RUN apt-get update && \
     apt-get install -y curl && \
     curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y nodejs && \
+    apt-get install -y nodejs python3-pip python3-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
