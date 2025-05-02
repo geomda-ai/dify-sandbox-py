@@ -9,7 +9,7 @@ from typing import Dict, Any
 from concurrent.futures import ProcessPoolExecutor
 
 def _run_python_code_in_process(code: str) -> Dict[str, Any]:
-    """在进程中执行Python代码的函数"""
+    """Function to execute Python code in a process"""
     stdout_buffer = io.StringIO()
     stderr_buffer = io.StringIO()
     
@@ -34,14 +34,14 @@ def _run_python_code_in_process(code: str) -> Dict[str, Any]:
         stderr_buffer.close()
 
 def _run_nodejs_code_in_process(code: str) -> Dict[str, Any]:
-    """在进程中执行Node.js代码的函数"""
+    """Function to execute Node.js code in a process"""
     try:
-        # 创建临时文件来存储JavaScript代码
+        # Create a temporary file to store JavaScript code
         with tempfile.NamedTemporaryFile(mode='w', suffix='.js', delete=False) as temp_file:
             temp_file.write(code)
             temp_file_path = temp_file.name
 
-        # 使用Node.js执行代码
+        # Use Node.js to execute code
         process = subprocess.Popen(
             ['node', temp_file_path],
             stdout=subprocess.PIPE,
@@ -51,7 +51,7 @@ def _run_nodejs_code_in_process(code: str) -> Dict[str, Any]:
         
         stdout, stderr = process.communicate()
         
-        # 删除临时文件
+        # Delete temporary file
         os.unlink(temp_file_path)
         
         if process.returncode == 0:
@@ -74,7 +74,7 @@ def _run_nodejs_code_in_process(code: str) -> Dict[str, Any]:
         }
 
 def check_nodejs_available():
-    """检查Node.js是否可用"""
+    """Check if Node.js is available"""
     try:
         subprocess.run(['node', '--version'], 
                       stdout=subprocess.PIPE, 
@@ -91,7 +91,7 @@ class CodeExecutor:
         self.nodejs_available = check_nodejs_available()
     
     async def shutdown(self):
-        """关闭进程池"""
+        """Shut down the process pool"""
         self.process_pool.shutdown(wait=True)
 
     async def execute(self, code: str, language: str = "python3") -> Dict[str, Any]:
@@ -105,14 +105,14 @@ class CodeExecutor:
                     return {
                         "success": False,
                         "output": "",
-                        "error": "Node.js未安装或不可用"
+                        "error": "Node.js is not installed or not available"
                     }
                 executor_func = _run_nodejs_code_in_process
             else:
                 return {
                     "success": False,
                     "output": "",
-                    "error": f"不支持的语言: {language}"
+                    "error": f"Unsupported language: {language}"
                 }
             
             future = loop.run_in_executor(
@@ -127,7 +127,7 @@ class CodeExecutor:
             return {
                 "success": False,
                 "output": "",
-                "error": f"代码执行超时 (>{self.timeout}秒)"
+                "error": f"Code execution timed out (> {self.timeout} seconds)"
             }
         except Exception as e:
             return {

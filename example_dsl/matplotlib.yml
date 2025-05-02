@@ -98,7 +98,7 @@ workflow:
       type: custom
       width: 244
     - data:
-        answer: '![描述文本](data:image/png;base64,{{#1732083953925.result#}})
+        answer: '![Image description](data:image/png;base64,{{#1732083953925.result#}})
 
           '
         desc: ''
@@ -121,17 +121,17 @@ workflow:
       width: 244
     - data:
         code: "import matplotlib.pyplot as plt\nimport numpy as np\nimport io\nimport\
-          \ base64\n\ndef generate_base64_plot():\n    # 数据准备\n    x = np.linspace(0,\
-          \ 10, 100)\n    y = np.sin(x)\n    \n    # 创建图形\n    plt.figure(figsize=(8,\
-          \ 6))  # 设置画布大小为 800x600 像素\n    plt.plot(x, y, label='Sine Wave', color='blue',\
-          \ linewidth=2)\n    \n    # 添加标题和标签\n    plt.title('Sine Wave Example',\
+          \ base64\n\ndef generate_base64_plot():\n    # Data preparation\n    x = np.linspace(0,\
+          \ 10, 100)\n    y = np.sin(x)\n    \n    # Create figure\n    plt.figure(figsize=(8,\
+          \ 6))  # Set canvas size to 800x600 pixels\n    plt.plot(x, y, label='Sine Wave', color='blue',\
+          \ linewidth=2)\n    \n    # Add title and labels\n    plt.title('Sine Wave Example',\
           \ fontsize=16)\n    plt.xlabel('X-axis', fontsize=12)\n    plt.ylabel('Y-axis',\
-          \ fontsize=12)\n    \n    # 添加网格和图例\n    plt.grid(True, linestyle='--',\
-          \ alpha=0.6)\n    plt.legend(fontsize=12)\n    \n    # 使用内存缓冲区保存图片为Base64字符串\n\
+          \ fontsize=12)\n    \n    # Add grid and legend\n    plt.grid(True, linestyle='--',\
+          \ alpha=0.6)\n    plt.legend(fontsize=12)\n    \n    # Use memory buffer to save image as Base64 string\n\
           \    buffer = io.BytesIO()\n    plt.savefig(buffer, format='png', dpi=100)\
-          \  # 使用 100 DPI 保存，确保像素为 800x600\n    buffer.seek(0)  # 将缓冲区指针回到起点\n   \
+          \  # Save at 100 DPI to ensure 800x600 pixels\n    buffer.seek(0)  # Reset buffer pointer to start\n   \
           \ base64_str = base64.b64encode(buffer.read()).decode('utf-8')\n    buffer.close()\n\
-          \    plt.close()  # 关闭绘图对象，释放资源\n    \n    return base64_str\n\n\ndef main():\n\
+          \    plt.close()  # Close plot object, release resources\n    \n    return base64_str\n\n\ndef main():\n\
           \    base64_image = generate_base64_plot()\n    return {\"result\": base64_image}\n"
         code_language: python3
         desc: ''

@@ -7,7 +7,7 @@ from .executor import CodeExecutor
 import os
 
 
-# 配置
+# Configuration
 API_KEY = os.getenv("API_KEY", "dify-sandbox")
 MAX_REQUESTS = int(os.getenv("MAX_REQUESTS", "100"))
 MAX_WORKERS = int(os.getenv("MAX_WORKERS", "10"))
@@ -16,20 +16,20 @@ WORKER_TIMEOUT = int(os.getenv("WORKER_TIMEOUT", "15"))
 app = FastAPI()
 executor = CodeExecutor(timeout=WORKER_TIMEOUT, max_workers=MAX_WORKERS)
 
-# 请求模型
+# Request model
 class CodeRequest(BaseModel):
     language: str
     code: str
     preload: Optional[str] = ""
     enable_network: Optional[bool] = False
 
-# 认证中间件
+# Authentication middleware
 class AuthMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         if request.url.path.startswith("/v1/sandbox"):
             api_key = request.headers.get("X-Api-Key")
             if not api_key or api_key != API_KEY:
-                # 修改这里：返回 JSONResponse 而不是直接返回 HTTPException
+                # Modified here: Return JSONResponse instead of directly returning HTTPException
                 from fastapi.responses import JSONResponse
                 return JSONResponse(
                     status_code=401,
@@ -41,7 +41,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
                 )
         return await call_next(request)
 
-# 并发控制中间件
+# Concurrency control middleware
 class ConcurrencyMiddleware(BaseHTTPMiddleware):
     def __init__(self, app):
         super().__init__(app)
@@ -66,7 +66,7 @@ class ConcurrencyMiddleware(BaseHTTPMiddleware):
                 self.current_requests -= 1
         return await call_next(request)
 
-# 添加中间件
+# Add middleware
 app.add_middleware(AuthMiddleware)
 app.add_middleware(ConcurrencyMiddleware)
 

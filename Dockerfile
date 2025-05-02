@@ -1,7 +1,7 @@
 FROM python:3.12-slim-bookworm
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-# 安装Node.js
+# Install Node.js
 RUN apt-get update && \
     apt-get install -y curl && \
     curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
@@ -9,27 +9,27 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# 设置工作目录
+# Set working directory
 WORKDIR /app
 
-# 复制依赖文件
+# Copy dependency files
 COPY requirements.txt .
 
-# 使用 uv 安装基础依赖到系统环境
+# Use uv to install base dependencies to system environment
 RUN uv pip install --system -r requirements.txt
 
-# 复制应用代码和启动脚本
+# Copy application code and startup script
 COPY app/ ./app/
 COPY start.sh .
 
-# 创建依赖目录
+# Create dependencies directory
 RUN mkdir -p /dependencies
 
-# 设置启动脚本权限
+# Set startup script permissions
 RUN chmod +x start.sh
 
-# 暴露端口
+# Expose port
 EXPOSE 8194
 
-# 使用启动脚本替代直接的 uvicorn 命令
+# Use startup script instead of direct uvicorn command
 CMD ["./start.sh"]
