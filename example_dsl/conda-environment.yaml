@@ -25,4 +25,31 @@ dependencies:
   - numbagg
   - seaborn
   - cfgrib
-  - kerchunk
+  # - kerchunk
+  - odc-stac
+  - odc-geo
+  - rio-stac
+  - stackstac
+  - boto3
+  - duckdb
+  - arabic_reshaper
+  - contextily
+  - ibis-framework
+  - rich
+  - fsspec
+  - pandas
+  - xarray-spatial
+  - datashader
+  - xcube-eopf
+  - sentinelhub
+  - pydap
+  - h5netcdf
+  - cftime
+  - nc-time-axis
+  - icechunk
+  - pip:
+      - obstore
+      - tilebench
+      - odc
+      - json_repair
+      - git+https://github.com/fsspec/kerchunk
