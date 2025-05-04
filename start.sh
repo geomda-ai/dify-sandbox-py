@@ -11,7 +11,7 @@ if [ -f "/dependencies/conda-environment.yaml" ]; then
     micromamba install -y -n base -f /dependencies/conda-environment.yaml
     
     # Clean up to save space
-    micromamba clean --all --yes
+    # micromamba clean --all --yes
 fi
 
 # Check and install pip dependencies

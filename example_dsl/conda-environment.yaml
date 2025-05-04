@@ -6,6 +6,7 @@ dependencies:
   # Build tools
   - gcc
   # Geo and data packages
+  - planetary-computer
   - rasterio
   - matplotlib
   - xarray
