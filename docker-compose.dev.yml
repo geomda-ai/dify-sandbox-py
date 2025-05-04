@@ -1,0 +1,18 @@
+services:
+  dify-sandbox:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: dify-sandbox-py:local
+    container_name: dify-sandbox
+    ports:
+      - "8194:8194" # Expose the FastAPI port
+    volumes:
+      - ./example_dsl:/dependencies # Mount example_dsl directory as /dependencies
+    environment:
+      - API_KEY=dify-sandbox # Optional: customize API key
+      - MAX_WORKERS=10 # Optional: customize max workers
+    restart: unless-stopped
+    # For development, you might want to see logs directly
+    # tty: true
+    # stdin_open: true

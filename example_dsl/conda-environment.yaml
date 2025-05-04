@@ -1,0 +1,28 @@
+name: base
+channels:
+  - conda-forge
+dependencies:
+  - requests
+  # Build tools
+  - gcc
+  # Geo and data packages
+  - rasterio
+  - matplotlib
+  - xarray
+  - cartopy
+  - folium
+  - pyogrio
+  - geopandas
+  - shapely
+  - rioxarray
+  - netCDF4
+  - scipy
+  - pystac
+  - pystac-client
+  - dask
+  - zarr
+  - bottleneck
+  - numbagg
+  - seaborn
+  - cfgrib
+  - kerchunk

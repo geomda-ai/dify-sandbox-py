@@ -8,7 +8,7 @@ if [ -f "/dependencies/conda-environment.yaml" ]; then
     echo "Conda environment file found, starting to install additional conda dependencies..."
     
     # Install packages from the conda environment file
-    micromamba env update -n base -f /dependencies/conda-environment.yaml
+    micromamba install -y -n base -f /dependencies/conda-environment.yaml
     
     # Clean up to save space
     micromamba clean --all --yes
@@ -20,7 +20,7 @@ if [ -f "/dependencies/python-requirements.txt" ]; then
     echo "Using pip mirror: $MIRROR_URL"
     
     # Use pip explicitly in the base conda environment
-    micromamba run -n base pip install -r /dependencies/python-requirements.txt -i "$MIRROR_URL"
+    pip install -r /dependencies/python-requirements.txt -i "$MIRROR_URL"
 fi
 
 # Start FastAPI application
