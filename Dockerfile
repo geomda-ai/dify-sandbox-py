@@ -1,30 +1,27 @@
-FROM ghcr.io/osgeo/gdal:ubuntu-small-3.10.3
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+FROM ghcr.io/mamba-org/micromamba:2.1.0-ubuntu24.04
 
-# Install Node.js, git, and eccodes libraries
-RUN apt-get update && \
-    apt-get install -y curl git libeccodes0 libeccodes-dev libeccodes-tools libudunits2-dev libffi-dev && \
-    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y nodejs python3-pip python3-dev && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+USER root
+
+# Create dependencies directory for additional requirements
+RUN mkdir -p /dependencies && chown $MAMBA_USER:$MAMBA_USER /dependencies
+
+# Copy environment.yaml file
+COPY --chown=$MAMBA_USER:$MAMBA_USER env.yaml /tmp/env.yaml
+
+# Install all dependencies from the conda environment and clean up
+RUN micromamba install -y -n base -f /tmp/env.yaml && \
+    micromamba clean --all --yes && \
+    rm -rf /tmp/env.yaml && \
+    find /opt/conda -follow -type f -name '*.a' -delete && \
+    find /opt/conda -follow -type f -name '*.js.map' -delete && \
+    find /opt/conda -name '__pycache__' -type d -exec rm -rf {} + || true
 
 # Set working directory
 WORKDIR /app
 
-# Copy dependency files
-COPY requirements.txt .
-
-# Use uv to install base dependencies to system environment
-# Using --break-system-packages to override externally managed Python
-RUN uv pip install --system --break-system-packages -r requirements.txt
-
 # Copy application code and startup script
-COPY app/ ./app/
-COPY start.sh .
-
-# Create dependencies directory
-RUN mkdir -p /dependencies
+COPY --chown=$MAMBA_USER:$MAMBA_USER app/ ./app/
+COPY --chown=$MAMBA_USER:$MAMBA_USER start.sh .
 
 # Set startup script permissions
 RUN chmod +x start.sh
@@ -32,5 +29,9 @@ RUN chmod +x start.sh
 # Expose port
 EXPOSE 8194
 
-# Use startup script instead of direct uvicorn command
+# Switch back to non-root user
+USER $MAMBA_USER
+
+# Set the entrypoint to activate conda and run the startup script
+ENTRYPOINT ["/usr/local/bin/_entrypoint.sh"]
 CMD ["./start.sh"]

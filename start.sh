@@ -3,11 +3,24 @@
 # Set default pip mirror source
 MIRROR_URL=${PIP_MIRROR_URL:-"https://pypi.org/simple"}
 
-# Check and install dependencies
+# Check and install conda dependencies from environment file
+if [ -f "/dependencies/conda-environment.yaml" ]; then
+    echo "Conda environment file found, starting to install additional conda dependencies..."
+    
+    # Install packages from the conda environment file
+    micromamba env update -n base -f /dependencies/conda-environment.yaml
+    
+    # Clean up to save space
+    micromamba clean --all --yes
+fi
+
+# Check and install pip dependencies
 if [ -f "/dependencies/python-requirements.txt" ]; then
-    echo "Dependency file found, starting to install additional dependencies..."
+    echo "Pip requirements file found, starting to install additional pip dependencies..."
     echo "Using pip mirror: $MIRROR_URL"
-    uv pip install --system --break-system-packages -r /dependencies/python-requirements.txt -i "$MIRROR_URL"
+    
+    # Use pip explicitly in the base conda environment
+    micromamba run -n base pip install -r /dependencies/python-requirements.txt -i "$MIRROR_URL"
 fi
 
 # Start FastAPI application
