@@ -3,8 +3,6 @@ channels:
   - conda-forge
 dependencies:
   - requests
-  # Build tools
-  - gcc
   # Geo and data packages
   - planetary-computer
   - rasterio
@@ -48,9 +46,4 @@ dependencies:
   - cftime
   - nc-time-axis
   - icechunk
-  - pip:
-      - obstore
-      - tilebench
-      - odc
-      - json_repair
-      - git+https://github.com/fsspec/kerchunk
+  - adlfs

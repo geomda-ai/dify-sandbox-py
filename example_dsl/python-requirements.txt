@@ -1,5 +1,5 @@
-requests
-jinja2
+obstore
+tilebench
+odc
 json_repair
-numpy
-matplotlib
+git+https://github.com/fsspec/kerchunk
